@@ -7,12 +7,11 @@ except ImportError:
 
 
 setup(
-    name="stocklquant",
+    name="stockquant",
     version="0.0.1",
     packages=[
-        "quant",
-        "quant/platform",
-        "quant/utils"
+        "stockquant",
+        "stockquant/utils"
     ],
     platforms="any",
     description="Professional quant framework",
