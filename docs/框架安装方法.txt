@@ -1,0 +1,7 @@
+StockQuant框架安装方法：
+--1.解压压缩包后，进入文件夹，在setup.py文件所在目录下打开命令行，运行python setup.py install
+--2.安装新版本的方法如上。
+--3.卸载可使用pip uninstall stockquant命令。
+
+GaryHertel
+2021/01/19

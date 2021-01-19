@@ -1,0 +1,17 @@
+{
+    "LOG": {
+        "level": "debug",
+        "handler": "stream"
+    },
+    "DINGTALK": "https://oapi.dingtalk.com/robot/send?access_token=d3a3687942336690883dbd79d74b453",
+    "TUSHARE": "1d180652821b570cd6513974b55f26cd73688",
+    "SENDMAIL": {
+        "from_addr" : "3456789@qq.com",
+        "password" : "xxeqsfqwcjgj",
+        "to_addr" : "iloveyou@icloud.com",
+        "smtp_server" : "smtp.qq.com",
+        "port": 587
+    }
+}
+
+

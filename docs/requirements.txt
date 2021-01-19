@@ -1,0 +1,8 @@
+numpy
+ta-lib
+requests
+concurrent-log-handler
+colorlog
+pandas
+matplotlib
+tushare
