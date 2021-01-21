@@ -13,6 +13,9 @@
 ### Tick数据
 
 ```python
+from stockquant.quant import *
+
+config.loads('config.json')
 tick = Market.tick("sh601003")
 ```
 
@@ -79,7 +82,7 @@ Market.shenzhen_component_index()		# 获取深圳成指
 ## 其他
 
 ```python
-Market.stocks_list		# 股票列表,获取基础信息数据，包括股票代码、名称、上市日期、退市日期等
+Market.stocks_list()		# 股票列表,获取基础信息数据，包括股票代码、名称、上市日期、退市日期等
 ```
 
 ```python
