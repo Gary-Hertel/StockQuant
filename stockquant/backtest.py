@@ -134,6 +134,12 @@ class BackTest:
         result = read_backtest_info()[7]
         return float(result)
 
+    def buy(self, price, amount, long_quantity, long_avg_price, profit, asset):
+        backtest_save(self.timestamp, "BUY", price, amount, long_quantity, long_avg_price, profit, asset)
+
+    def sell(self, price, amount, short_quantity, short_avg_price, profit, asset):
+        backtest_save(self.timestamp, "SELL", price, amount, short_quantity, short_avg_price, profit, asset)
+
 
 def backtest_save(timestamp, action, price, amount, long_quantity, long_avg_price, profit, asset):
     """保存回测信息至csv文件"""
