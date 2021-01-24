@@ -137,8 +137,8 @@ class BackTest:
     def buy(self, price, amount, long_quantity, long_avg_price, profit, asset):
         backtest_save(self.timestamp, "BUY", price, amount, long_quantity, long_avg_price, profit, asset)
 
-    def sell(self, price, amount, short_quantity, short_avg_price, profit, asset):
-        backtest_save(self.timestamp, "SELL", price, amount, short_quantity, short_avg_price, profit, asset)
+    def sell(self, price, amount, long_quantity, long_avg_price, profit, asset):
+        backtest_save(self.timestamp, "SELL", price, amount, long_quantity, long_avg_price, profit, asset)
 
 
 def backtest_save(timestamp, action, price, amount, long_quantity, long_avg_price, profit, asset):
