@@ -11,7 +11,7 @@ from stockquant.indicators import *
 __all__ = [
     "Market", "BackTest", "backtest_save", "plot_asset", "DingTalk", "sendmail", "logger",
     "txt_save", "txt_read", "save_to_csv_file", "read_csv_file",
-    "sleep", "ts_to_datetime_str", "get_date", "get_localtime", "now", "not_open_time",
+    "sleep", "ts_to_datetime_str", "get_date", "get_localtime", "now", "not_open_time", "datetime_str_to_ts",
     'ATR', "BOLL", "CurrentBar", "HIGHEST", "MA", "MACD", "EMA", "KAMA", "KDJ", "LOWEST", "OBV", "RSI", "ROC", "STOCHRSI", "SAR", "STDDEV", "TRIX", "VOLUME",
     "config",
 ]

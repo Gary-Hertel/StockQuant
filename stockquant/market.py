@@ -225,7 +225,7 @@ class Tick:
         tick = Tick(symbol)
         response = requests.get("http://hq.sinajs.cn/list=%s" % symbol).text
         data = response.split(",")
-        tick.timestamp = data[-4] + " " + data[-3]
+        tick.timestamp = data[-4] + " " + data[-3] if str(symbol).startswith("sh") else data[-3] + " " + data[-2]
         tick.symbol = data[0].replace('"', "").split("=")[1]
         tick.open = float(data[1])
         tick.yesterday_close = float(data[2])

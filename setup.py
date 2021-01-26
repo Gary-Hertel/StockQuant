@@ -8,7 +8,7 @@ except ImportError:
 
 setup(
     name="stockquant",
-    version="0.0.1",
+    version="0.0.2",
     packages=[
         "stockquant",
         "stockquant/utils"
