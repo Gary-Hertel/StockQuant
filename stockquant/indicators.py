@@ -46,6 +46,25 @@ def BOLL(length, kline):
     return dict
 
 
+def CCI(length, kline):
+    """
+    顺势指标
+    :param length:长度参数
+    :param kline:传入指定k线数据
+    :return:
+    """
+    high_list, low_list, close_list = [], [], []
+    for i in kline:
+        high_list.append(float(i[2]))
+        low_list.append(float(i[3]))
+        close_list.append(float(i[4]))
+    high_arr = np.array(high_list)
+    low_arr = np.array(low_list)
+    close_arr = np.array(close_list)
+    cci = talib.CCI(high_arr, low_arr, close_arr, timeperiod=length)
+    return cci
+
+
 def CurrentBar(kline):
     """
     获取k线数据的长度

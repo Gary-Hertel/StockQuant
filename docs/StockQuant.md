@@ -110,6 +110,7 @@ kline = Market.kline("sh601003", "1d")
 |     `指数移动平均线`     |        `ATR(14, kline=kline)`         |                          `一维数组`                          |
 |     `k线数据的长度`      |       `CurrentBar(kline=kline)`       |                          `整型数字`                          |
 |          `布林`          |        `BOLL(20, kline=kline)`        | `{"upperband": 上轨， "middleband": 中轨， "lowerband": 下轨}` |
+|        `顺势指标`        |        `CCI(20, kline=kline)`         |                          `一维数组`                          |
 |       `周期最高价`       |      `HIGHEST(20, kline=kline)`       |                          `一维数组`                          |
 |       `移动平均线`       |       `MA(20, 30, kline=kline)`       |                          `一维数组`                          |
 |   `指数平滑异同平均线`   |    `MACD(14, 26, 9, kline=kline)`     |     `{'DIF': DIF数组, 'DEA': DEA数组, 'MACD': MACD数组}`     |
