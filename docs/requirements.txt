@@ -6,3 +6,4 @@ colorlog
 pandas
 matplotlib
 tushare
+baostock

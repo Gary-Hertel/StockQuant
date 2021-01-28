@@ -8,9 +8,10 @@ except ImportError:
 
 setup(
     name="stockquant",
-    version="0.0.2",
+    version="0.0.3",
     packages=[
         "stockquant",
+        "stockquant/source",
         "stockquant/utils"
     ],
     platforms="any",
@@ -29,6 +30,7 @@ setup(
         "colorlog",
         "pandas",
         "matplotlib",
-        "tushare"
+        "tushare",
+        "baostock"
     ]
 )
