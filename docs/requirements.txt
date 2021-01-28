@@ -7,3 +7,4 @@ pandas
 matplotlib
 tushare
 baostock
+finplot

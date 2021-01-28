@@ -31,6 +31,7 @@ setup(
         "pandas",
         "matplotlib",
         "tushare",
-        "baostock"
+        "baostock",
+        "finplot"
     ]
 )
