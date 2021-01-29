@@ -8,3 +8,4 @@ matplotlib
 tushare
 baostock
 finplot
+akshare

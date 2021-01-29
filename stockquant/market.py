@@ -1,10 +1,16 @@
 from stockquant.source.baostockdata import BaoStockData
 from stockquant.source.sinadata import SinaData
+from stockquant.source.aksharedata import AkShareData
 from stockquant.source.tusharedata import TuShareData
 from stockquant.utils.tools import get_localtime
+from stockquant.utils.logger import logger
 
 
 class Market:
+
+    """
+    SinaData
+    """
 
     @staticmethod
     def tick(symbol):
@@ -13,6 +19,7 @@ class Market:
         :param symbol: 例如："sh601003"，或者"sz002307"，前者是沪市，后者是深市
         :return:返回一个字典
         """
+        logger.warning("It is recommended to increase the time interval when calling real-time data ！")
         return SinaData.get_realtime_data(symbol)
 
     @staticmethod
@@ -30,6 +37,10 @@ class Market:
         :return:
         """
         return SinaData.shanghai_component_index()
+
+    """
+    BaoStockData
+    """
 
     @staticmethod
     def kline(symbol, timeframe, adj=None, start_date=None, end_date=None):
@@ -324,6 +335,48 @@ class Market:
         date：查询日期，格式XXXX-XX-XX，为空时默认最新日期。
         """
         return BaoStockData.query_zz500_stocks(date)
+
+    """
+    AkShareData
+    """
+
+    @staticmethod
+    def stock_sse_summary_df():
+        """
+        上海证券交易所-股票数据总貌
+        限量: 单次返回最近交易日的股票数据总貌数据(当前交易日的数据需要交易所收盘后统计)
+        """
+        return AkShareData.stock_sse_summary_df()
+
+    @staticmethod
+    def stock_szse_summary():
+        """
+        深圳证券交易所-市场总貌
+        限量: 单次返回最近交易日的市场总貌数据(当前交易日的数据需要交易所收盘后统计)
+        """
+        return AkShareData.stock_szse_summary()
+
+    @staticmethod
+    def all_stock_tick():
+        """
+        描述: A 股数据是从新浪财经获取的数据, 重复运行本函数会被新浪暂时封 IP, 建议增加时间间隔
+        限量: 单次返回所有 A 股上市公司的实时行情数据
+        """
+        logger.warning("It is recommended to increase the time interval when calling real-time data ！")
+        return AkShareData.all_stock_tick()
+
+    @staticmethod
+    def stock_zh_index_spot():
+        """
+        描述: 股票指数数据是从新浪财经获取的数据
+        限量: 单次返回所有指数的实时行情数据
+        """
+        logger.warning("It is recommended to increase the time interval when calling real-time data ！")
+        return AkShareData.stock_zh_index_spot()
+
+    """
+    TuShareData
+    """
 
     @staticmethod
     def new_stock():

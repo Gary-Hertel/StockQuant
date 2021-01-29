@@ -8,7 +8,7 @@ except ImportError:
 
 setup(
     name="stockquant",
-    version="0.0.5",
+    version="0.0.6",
     packages=[
         "stockquant",
         "stockquant/source",
@@ -32,6 +32,7 @@ setup(
         "matplotlib",
         "tushare",
         "baostock",
-        "finplot"
+        "finplot",
+        "akshare"
     ]
 )
