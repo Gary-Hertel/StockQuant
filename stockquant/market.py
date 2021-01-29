@@ -1,6 +1,7 @@
-from stockquant.source.baostock import BaoStockData
-from stockquant.source.sina import Sina
+from stockquant.source.baostockdata import BaoStockData
+from stockquant.source.sinadata import SinaData
 from stockquant.source.tushare_pro import TuShare
+from stockquant.utils.tools import get_localtime
 
 
 class Market:
@@ -12,7 +13,7 @@ class Market:
         :param symbol: 例如："sh601003"，或者"sz002307"，前者是沪市，后者是深市
         :return:返回一个字典
         """
-        return Sina.get_realtime_data(symbol)
+        return SinaData.get_realtime_data(symbol)
 
     @staticmethod
     def shenzhen_component_index():
@@ -20,7 +21,7 @@ class Market:
         获取深圳成指
         :return:返回一个字典
         """
-        return Sina.shenzhen_component_index()
+        return SinaData.shenzhen_component_index()
 
     @staticmethod
     def shanghai_component_index():
@@ -28,7 +29,7 @@ class Market:
         获取上证综指
         :return:
         """
-        return Sina.shanghai_component_index()
+        return SinaData.shanghai_component_index()
 
     @staticmethod
     def kline(symbol, timeframe, adj=None, start_date=None, end_date=None):
@@ -41,19 +42,62 @@ class Market:
         :param end_date:结束日期（包含），格式“YYYY-MM-DD”，为空时取最近一个交易日；
         :return:返回一个列表,其中每一条k线数据包含在一个列表中
         """
-        return BaoStockData.fetch_kline(symbol, timeframe, adj=adj, start_date=start_date, end_date=end_date)
+        return BaoStockData.query_history_k_data_plus(symbol, timeframe, adj=adj, start_date=start_date, end_date=end_date)
 
     @staticmethod
-    def stocks_list():
+    def stocks_list(day=None):
         """股票列表,获取基础信息数据，包括股票代码、名称、上市日期、退市日期等"""
-        return TuShare.stocks_list()
+        return BaoStockData.query_all_stock(day=day)
 
     @staticmethod
     def today_is_open():
         """查询今日沪深股市是否开盘，如果开盘返回True,反之False"""
-        return TuShare.today_is_open()
+        today = get_localtime()[0: 10]
+        result = BaoStockData.query_trade_dates(start_date=today, end_date=today)['is_trading_day'][0]
+        return True if result == '1' else False
+
+    @staticmethod
+    def stock_basic_info(symbol=None, symbol_name=None):
+        """
+        证券基本资料
+        方法说明：获取证券基本资料，可以通过参数设置获取对应证券代码、证券名称的数据。
+        返回类型：pandas的DataFrame类型。
+        :param symbol:A股股票代码，sh或sz+6位数字代码，或者指数代码，如：sh601398。sh：上海；sz：深圳。可以为空；
+        :param symbol_name:股票名称，支持模糊查询，可以为空。
+        """
+        code = 'sh.' + str(symbol).split('sh')[1] if str(symbol).startswith("sh") else 'sz.' + str(symbol).split('sz')[1]
+        return BaoStockData.query_stock_basic(code, symbol_name)
+
+    @staticmethod
+    def dividend_data(symbol, year, yearType):
+        """
+        查询除权除息信息
+        :param symbol：股票代码，sh或sz+6位数字代码，或者指数代码，如：sh601398。sh：上海；sz：深圳。此参数不可为空；
+        :param year：年份，如：2017。此参数不可为空；
+        :param yearType：年份类别。"report":预案公告年份，"operate":除权除息年份。此参数不可为空。
+        """
+        code = 'sh.' + str(symbol).split('sh')[1] if str(symbol).startswith("sh") else 'sz.' + str(symbol).split('sz')[1]
+        return BaoStockData.query_dividend_data(code, year, yearType)
+
+    @staticmethod
+    def adjust_factor(symbol, start_date=None, end_date=None):
+        """
+        查询复权因子信息
+        BaoStock提供的是涨跌幅复权算法复权因子
+        :param symbol:股票代码，sh或sz+6位数字代码，或者指数代码，如：sh601398。sh：上海；sz：深圳。此参数不可为空；
+        :param start_date：开始日期，为空时默认为2015-01-01，包含此日期；
+        :param end_date：结束日期，为空时默认当前日期，包含此日期。
+        """
+        code = 'sh.' + str(symbol).split('sh')[1] if str(symbol).startswith("sh") else 'sz.' + str(symbol).split('sz')[1]
+        return BaoStockData.query_adjust_factor(code, start_date, end_date)
 
     @staticmethod
     def new_stock():
         """获取新股上市列表数据"""
         return TuShare.new_stock()
+
+
+if __name__ == '__main__':
+
+    # print(Market.stocks_list(day="2021-01-28"))
+    print(Market.stock_basic_info())

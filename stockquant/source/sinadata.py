@@ -2,7 +2,7 @@ import requests
 from stockquant.tick import Tick
 
 
-class Sina:
+class SinaData:
 
     def __init__(self):
         pass
