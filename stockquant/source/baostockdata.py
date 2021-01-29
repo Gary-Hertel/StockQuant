@@ -23,17 +23,14 @@ class BaoStockData:
 
         rs = bs.query_trade_dates(start_date=start_date, end_date=end_date)
         if rs.error_code != '0':
-            logger.error('login respond  error_msg:' + rs.error_msg)
+            logger.error('query_trade_dates respond  error_msg:' + rs.error_msg)
 
         data_list = []
         while (rs.error_code == '0') & rs.next():
             data_list.append(rs.get_row_data())
         result = pd.DataFrame(data_list, columns=rs.fields)
 
-        lg = bs.logout()
-        if lg.error_code != '0':
-            logger.error('login respond  error_msg:' + lg.error_msg)
-
+        bs.logout()
         return result
 
     @staticmethod
@@ -51,17 +48,14 @@ class BaoStockData:
 
         rs = bs.query_all_stock(day=day)
         if rs.error_code != '0':
-            logger.error('login respond  error_msg:' + rs.error_msg)
+            logger.error('query_all_stock respond  error_msg:' + rs.error_msg)
 
         data_list = []
         while (rs.error_code == '0') & rs.next():
             data_list.append(rs.get_row_data())
         result = pd.DataFrame(data_list, columns=rs.fields)
 
-        lg = bs.logout()
-        if lg.error_code != '0':
-            logger.error('login respond  error_msg:' + lg.error_msg)
-
+        bs.logout()
         return result
 
     @staticmethod
@@ -79,17 +73,14 @@ class BaoStockData:
 
         rs = bs.query_stock_basic(code=code, code_name=code_name)
         if rs.error_code != '0':
-            logger.error('login respond  error_msg:' + rs.error_msg)
+            logger.error('query_stock_basic respond  error_msg:' + rs.error_msg)
 
         data_list = []
         while (rs.error_code == '0') & rs.next():
             data_list.append(rs.get_row_data())
         result = pd.DataFrame(data_list, columns=rs.fields)
 
-        lg = bs.logout()
-        if lg.error_code != '0':
-            logger.error('login respond  error_msg:' + lg.error_msg)
-
+        bs.logout()
         return result
 
     @staticmethod
@@ -149,16 +140,14 @@ class BaoStockData:
             adjustflag=adjust_flag
         )
         if rs.error_code != "0":
-            logger.error('fetch kline data error: {}'.format(rs.error_msg))
+            logger.error('query_history_k_data_plus respond error: {}'.format(rs.error_msg))
 
         data_list = []
         while (rs.error_code == '0') & rs.next():
             data_list.append(rs.get_row_data())
         result = pd.DataFrame(data_list, columns=rs.fields)
 
-        lg = bs.logout()
-        if lg.error_code != "0":
-            logger.error("error: {}".format(lg.error_msg))
+        bs.logout()
 
         if 'm' in timeframe or 'h' in timeframe:
             result = result.drop("date", axis=1)
@@ -185,10 +174,7 @@ class BaoStockData:
 
         result_dividend = pd.DataFrame(rs_list, columns=rs_dividend.fields)
 
-        lg = bs.logout()
-        if lg.error_code != '1':
-            logger.error('login respond  error_msg:' + lg.error_msg)
-
+        bs.logout()
         return result_dividend
 
     @staticmethod
@@ -210,11 +196,465 @@ class BaoStockData:
             rs_list.append(rs_factor.get_row_data())
         result_factor = pd.DataFrame(rs_list, columns=rs_factor.fields)
 
-        lg = bs.logout()
+        bs.logout()
+        return result_factor
+
+    @staticmethod
+    def query_profit_data(code, year=None, quarter=None):
+        """
+        季频盈利能力
+        方法说明：通过API接口获取季频盈利能力信息，可以通过参数设置获取对应年份、季度数据，提供2007年至今数据。
+        返回类型：pandas的DataFrame类型。
+        参数含义：
+        code：股票代码，sh或sz.+6位数字代码，或者指数代码，如：sh.601398。sh：上海；sz：深圳。此参数不可为空；
+        year：统计年份，为空时默认当前年；
+        quarter：统计季度，可为空，默认当前季度。不为空时只有4个取值：1，2，3，4。
+        """
+        lg = bs.login()
         if lg.error_code != '0':
             logger.error('login respond  error_msg:' + lg.error_msg)
 
-        return result_factor
+        profit_list = []
+        rs_profit = bs.query_profit_data(code=code, year=year, quarter=quarter)
+        while (rs_profit.error_code == '0') & rs_profit.next():
+            profit_list.append(rs_profit.get_row_data())
+        result_profit = pd.DataFrame(profit_list, columns=rs_profit.fields)
+
+        bs.logout()
+        return result_profit
+
+    @staticmethod
+    def query_operation_data(code, year=None, quarter=None):
+        """
+        季频营运能力
+        方法说明：通过API接口获取季频营运能力信息，可以通过参数设置获取对应年份、季度数据，提供2007年至今数据。
+        返回类型：pandas的DataFrame类型。
+        参数含义：
+        code：股票代码，sh或sz.+6位数字代码，或者指数代码，如：sh.601398。sh：上海；sz：深圳。此参数不可为空；
+        year：统计年份，为空时默认当前年；
+        quarter：统计季度，为空时默认当前季度。不为空时只有4个取值：1，2，3，4。
+        """
+        lg = bs.login()
+        if lg.error_code != '0':
+            logger.error('login respond  error_msg:' + lg.error_msg)
+
+        operation_list = []
+        rs_operation = bs.query_operation_data(code=code, year=year, quarter=quarter)
+        while (rs_operation.error_code == '0') & rs_operation.next():
+            operation_list.append(rs_operation.get_row_data())
+        result_operation = pd.DataFrame(operation_list, columns=rs_operation.fields)
+
+        bs.logout()
+        return result_operation
+
+    @staticmethod
+    def query_growth_data(code, year=None, quarter=None):
+        """
+        季频成长能力
+        方法说明：通过API接口获取季频成长能力信息，可以通过参数设置获取对应年份、季度数据，提供2007年至今数据。
+        返回类型：pandas的DataFrame类型。
+        参数含义：
+        code：股票代码，sh或sz.+6位数字代码，或者指数代码，如：sh.601398。sh：上海；sz：深圳。此参数不可为空；
+        year：统计年份，为空时默认当前年；
+        quarter：统计季度，为空时默认当前季度。不为空时只有4个取值：1，2，3，4。
+        """
+        lg = bs.login()
+        if lg.error_code != '0':
+            logger.error('login respond  error_msg:' + lg.error_msg)
+
+        growth_list = []
+        rs_growth = bs.query_growth_data(code=code, year=year, quarter=quarter)
+        while (rs_growth.error_code == '0') & rs_growth.next():
+            growth_list.append(rs_growth.get_row_data())
+        result_growth = pd.DataFrame(growth_list, columns=rs_growth.fields)
+
+        bs.logout()
+        return result_growth
+
+    @staticmethod
+    def query_balance_data(code, year=None, quarter=None):
+        """
+        季频偿债能力
+        通过API接口获取季频偿债能力信息，可以通过参数设置获取对应年份、季度数据，提供2007年至今数据。
+        返回类型：pandas的DataFrame类型。
+        参数含义：
+        code：股票代码，sh或sz.+6位数字代码，或者指数代码，如：sh.601398。sh：上海；sz：深圳。此参数不可为空；
+        year：统计年份，为空时默认当前年；
+        quarter：统计季度，为空时默认当前季度。不为空时只有4个取值：1，2，3，4。
+        """
+        lg = bs.login()
+        if lg.error_code != '0':
+            logger.error('login respond  error_msg:' + lg.error_msg)
+
+        balance_list = []
+        rs_balance = bs.query_balance_data(code=code, year=year, quarter=quarter)
+        while (rs_balance.error_code == '0') & rs_balance.next():
+            balance_list.append(rs_balance.get_row_data())
+        result_balance = pd.DataFrame(balance_list, columns=rs_balance.fields)
+
+        bs.logout()
+        return result_balance
+
+    @staticmethod
+    def query_cash_flow_data(code, year=None, quarter=None):
+        """
+        季频现金流量
+        方法说明：通过API接口获取季频现金流量信息，可以通过参数设置获取对应年份、季度数据，提供2007年至今数据。
+        返回类型：pandas的DataFrame类型.
+        参数含义：
+        code：股票代码，sh或sz.+6位数字代码，或者指数代码，如：sh.601398。sh：上海；sz：深圳。此参数不可为空；
+        year：统计年份，为空时默认当前年；
+        quarter：统计季度，为空时默认当前季度。不为空时只有4个取值：1，2，3，4。
+        """
+        lg = bs.login()
+        if lg.error_code != '0':
+            logger.error('login respond  error_msg:' + lg.error_msg)
+
+        cash_flow_list = []
+        rs_cash_flow = bs.query_cash_flow_data(code=code, year=year, quarter=quarter)
+        while (rs_cash_flow.error_code == '0') & rs_cash_flow.next():
+            cash_flow_list.append(rs_cash_flow.get_row_data())
+        result_cash_flow = pd.DataFrame(cash_flow_list, columns=rs_cash_flow.fields)
+
+        bs.logout()
+        return result_cash_flow
+
+    @staticmethod
+    def query_dupont_data(code, year=None, quarter=None):
+        """
+        季频杜邦指数
+        方法说明：通过API接口获取季频杜邦指数信息，可以通过参数设置获取对应年份、季度数据，提供2007年至今数据。
+        返回类型：pandas的DataFrame类型。
+        参数含义：
+        code：股票代码，sh或sz.+6位数字代码，或者指数代码，如：sh.601398。sh：上海；sz：深圳。此参数不可为空；
+        year：统计年份，为空时默认当前年；
+        quarter：统计季度，为空时默认当前季度。不为空时只有4个取值：1，2，3，4。
+        """
+        lg = bs.login()
+        if lg.error_code != '0':
+            logger.error('login respond  error_msg:' + lg.error_msg)
+
+        dupont_list = []
+        rs_dupont = bs.query_dupont_data(code=code, year=year, quarter=quarter)
+        while (rs_dupont.error_code == '0') & rs_dupont.next():
+            dupont_list.append(rs_dupont.get_row_data())
+        result_profit = pd.DataFrame(dupont_list, columns=rs_dupont.fields)
+
+        bs.logout()
+        return result_profit
+
+    @staticmethod
+    def query_performance_express_report(code, start_date, end_date):
+        """
+        季频公司业绩快报
+        方法说明：通过API接口获取季频公司业绩快报信息，可以通过参数设置获取起止年份数据，提供2006年至今数据。
+        返回类型：pandas的DataFrame类型。
+        参数含义：
+        code：股票代码，sh或sz.+6位数字代码，或者指数代码，如：sh.601398。sh：上海；sz：深圳。此参数不可为空；
+        start_date：开始日期，发布日期或更新日期在这个范围内；
+        end_date：结束日期，发布日期或更新日期在这个范围内。
+        """
+        lg = bs.login()
+        if lg.error_code != '0':
+            logger.error('login respond  error_msg:' + lg.error_msg)
+
+        rs = bs.query_performance_express_report(code, start_date=start_date, end_date=end_date)
+        if rs.error_code != '0':
+            logger.error('query_performance_express_report respond  error_msg:' + rs.error_msg)
+
+        result_list = []
+        while (rs.error_code == '0') & rs.next():
+            result_list.append(rs.get_row_data())
+        result = pd.DataFrame(result_list, columns=rs.fields)
+
+        bs.logout()
+        return result
+
+    @staticmethod
+    def query_forcast_report(code, start_date, end_date):
+        """
+        季频公司业绩预告
+        方法说明：通过API接口获取季频公司业绩预告信息，可以通过参数设置获取起止年份数据，提供2003年至今数据。
+        返回类型：pandas的DataFrame类型。
+        参数含义：
+        code：股票代码，sh或sz.+6位数字代码，或者指数代码，如：sh.601398。sh：上海；sz：深圳。此参数不可为空；
+        start_date：开始日期，发布日期或更新日期在这个范围内；
+        end_date：结束日期，发布日期或更新日期在这个范围内。
+        """
+        lg = bs.login()
+        if lg.error_code != '0':
+            logger.error('login respond  error_msg:' + lg.error_msg)
+
+        rs_forecast = bs.query_forecast_report(code, start_date=start_date, end_date=end_date)
+        if rs_forecast.error_code != '0':
+            logger.error('query_forecast_reprot respond  error_msg:' + rs_forecast.error_msg)
+
+        rs_forecast_list = []
+        while (rs_forecast.error_code == '0') & rs_forecast.next():
+            rs_forecast_list.append(rs_forecast.get_row_data())
+        result_forecast = pd.DataFrame(rs_forecast_list, columns=rs_forecast.fields)
+
+        bs.logout()
+        return result_forecast
+
+    @staticmethod
+    def query_deposit_rate_data(start_date=None, end_date=None):
+        """
+        存款利率
+        方法说明：通过API接口获取存款利率，可以通过参数设置获取对应起止日期的数据。
+        返回类型：pandas的DataFrame类型。
+        参数含义：
+        start_date：开始日期，格式XXXX-XX-XX，发布日期在这个范围内，可以为空；
+        end_date：结束日期，格式XXXX-XX-XX，发布日期在这个范围内，可以为空。
+        """
+        lg = bs.login()
+        if lg.error_code != '0':
+            logger.error('login respond  error_msg:' + lg.error_msg)
+
+        rs = bs.query_deposit_rate_data(start_date=start_date, end_date=end_date)
+        if rs.error_code != '0':
+            logger.error('query_deposit_rate_data respond  error_msg:' + rs.error_msg)
+
+        data_list = []
+        while (rs.error_code == '0') & rs.next():
+            data_list.append(rs.get_row_data())
+        result = pd.DataFrame(data_list, columns=rs.fields)
+
+        bs.logout()
+        return result
+
+    @staticmethod
+    def query_loan_rate_data(start_date=None, end_date=None):
+        """
+        贷款利率
+        方法说明：通过API接口获取贷款利率，可以通过参数设置获取对应起止日期的数据。
+        返回类型：pandas的DataFrame类型。
+        参数含义：
+        start_date：开始日期，格式XXXX-XX-XX，发布日期在这个范围内，可以为空；
+        end_date：结束日期，格式XXXX-XX-XX，发布日期在这个范围内，可以为空。
+        """
+        lg = bs.login()
+        if lg.error_code != '0':
+            logger.error('login respond  error_msg:' + lg.error_msg)
+
+        rs = bs.query_loan_rate_data(start_date=start_date, end_date=end_date)
+        if rs.error_code != '0':
+            logger.error('query_loan_rate_data respond  error_msg:' + rs.error_msg)
+
+        data_list = []
+        while (rs.error_code == '0') & rs.next():
+            data_list.append(rs.get_row_data())
+        result = pd.DataFrame(data_list, columns=rs.fields)
+
+        bs.logout()
+        return result
+
+    @staticmethod
+    def query_required_reserve_ratio_data(start_date=None, end_date=None, yearType=None):
+        """
+        存款准备金率
+        方法说明：通过API接口获取存款准备金率，可以通过参数设置获取对应起止日期的数据。
+        返回类型：pandas的DataFrame类型。
+        参数含义：
+        start_date：开始日期，格式XXXX-XX-XX，发布日期在这个范围内，可以为空；
+        end_date：结束日期，格式XXXX-XX-XX，发布日期在这个范围内，可以为空；
+        yearType:年份类别，默认为0，查询公告日期；1查询生效日期。
+        """
+        yearType = yearType or '0'
+
+        lg = bs.login()
+        if lg.error_code != '0':
+            logger.error('login respond  error_msg:' + lg.error_msg)
+
+        rs = bs.query_required_reserve_ratio_data(start_date=start_date, end_date=end_date, yearType=yearType)
+        if rs.error_code != '0':
+            logger.error('query_required_reserve_ratio_data respond  error_msg:' + rs.error_msg)
+
+        data_list = []
+        while (rs.error_code == '0') & rs.next():
+            data_list.append(rs.get_row_data())
+        result = pd.DataFrame(data_list, columns=rs.fields)
+
+        bs.logout()
+        return result
+
+    @staticmethod
+    def query_money_supply_data_month(start_date=None, end_date=None):
+        """
+        货币供应量
+        方法说明：通过API接口获取货币供应量，可以通过参数设置获取对应起止日期的数据。
+        返回类型：pandas的DataFrame类型。
+        参数含义：
+        start_date：开始日期，格式XXXX-XX，发布日期在这个范围内，可以为空；
+        end_date：结束日期，格式XXXX-XX，发布日期在这个范围内，可以为空。
+        """
+        lg = bs.login()
+        if lg.error_code != '0':
+            logger.error('login respond  error_msg:' + lg.error_msg)
+
+        rs = bs.query_money_supply_data_month(start_date=start_date, end_date=end_date)
+        if rs.error_code != '0':
+            logger.error('query_money_supply_data_month respond  error_msg:' + rs.error_msg)
+
+        data_list = []
+        while (rs.error_code == '0') & rs.next():
+            data_list.append(rs.get_row_data())
+        result = pd.DataFrame(data_list, columns=rs.fields)
+
+        bs.logout()
+        return result
+
+    @staticmethod
+    def query_money_supply_data_year(start_date=None, end_date=None):
+        """
+        货币供应量(年底余额)
+        方法说明：通过API接口获取货币供应量(年底余额)，可以通过参数设置获取对应起止日期的数据。
+        返回类型：pandas的DataFrame类型。
+        参数含义：
+        start_date：开始日期，格式XXXX，发布日期在这个范围内，可以为空；
+        end_date：结束日期，格式XXXX，发布日期在这个范围内，可以为空。
+        """
+        lg = bs.login()
+        if lg.error_code != '0':
+            logger.error('login respond  error_msg:' + lg.error_msg)
+
+        rs = bs.query_money_supply_data_year(start_date=start_date, end_date=end_date)
+        if rs.error_code != '0':
+            logger.error('query_money_supply_data_year respond  error_msg:' + rs.error_msg)
+
+        data_list = []
+        while (rs.error_code == '0') & rs.next():
+            data_list.append(rs.get_row_data())
+        result = pd.DataFrame(data_list, columns=rs.fields)
+
+        bs.logout()
+        return result
+
+    @staticmethod
+    def query_shibor_data(start_date=None, end_date=None):
+        """
+        银行间同业拆放利率
+        方法说明：通过API接口获取银行间同业拆放利率，可以通过参数设置获取对应起止日期的数据。
+        返回类型：pandas的DataFrame类型。
+        参数含义：
+        start_date：开始日期，格式XXXX，发布日期在这个范围内，可以为空；
+        end_date：结束日期，格式XXXX，发布日期在这个范围内，可以为空。
+        """
+        lg = bs.login()
+        if lg.error_code != '0':
+            logger.error('login respond  error_msg:' + lg.error_msg)
+
+        rs = bs.query_shibor_data(start_date=start_date, end_date=end_date)
+        if rs.error_code != '0':
+            logger.error('query_shibor_data respond  error_msg:' + rs.error_msg)
+
+        data_list = []
+        while (rs.error_code == '0') & rs.next():
+            data_list.append(rs.get_row_data())
+        result = pd.DataFrame(data_list, columns=rs.fields)
+
+        bs.logout()
+        return result
+
+    @staticmethod
+    def query_stock_industry(code=None, date=None):
+        """
+        行业分类
+        方法说明：通过API接口获取行业分类信息，更新频率：每周一更新。
+        返回类型：pandas的DataFrame类型。
+        参数含义：
+        code：A股股票代码，sh或sz.+6位数字代码，或者指数代码，如：sh.601398。sh：上海；sz：深圳。可以为空；
+        date：查询日期，格式XXXX-XX-XX，为空时默认最新日期。
+        """
+        lg = bs.login()
+        if lg.error_code != '0':
+            logger.error('login respond  error_msg:' + lg.error_msg)
+
+        rs = bs.query_stock_industry(code, date)
+        if rs.error_code != '0':
+            logger.error('query_stock_industry respond  error_msg:' + rs.error_msg)
+
+        industry_list = []
+        while (rs.error_code == '0') & rs.next():
+            industry_list.append(rs.get_row_data())
+        result = pd.DataFrame(industry_list, columns=rs.fields)
+
+        bs.logout()
+        return result
+
+    @staticmethod
+    def query_sz50_stocks(date=None):
+        """
+        上证50成分股
+        方法说明：通过API接口获取上证50成分股信息，更新频率：每周一更新。
+        返回类型：pandas的DataFrame类型。
+        参数含义：
+        date：查询日期，格式XXXX-XX-XX，为空时默认最新日期。
+        """
+        lg = bs.login()
+        if lg.error_code != '0':
+            logger.error('login respond  error_msg:' + lg.error_msg)
+
+        rs = bs.query_sz50_stocks(date)
+        if rs.error_code != '0':
+            logger.error('query_sz50_stocks respond  error_msg:' + rs.error_msg)
+
+        sz50_stocks = []
+        while (rs.error_code == '0') & rs.next():
+            sz50_stocks.append(rs.get_row_data())
+        result = pd.DataFrame(sz50_stocks, columns=rs.fields)
+
+        bs.logout()
+        return result
+
+    @staticmethod
+    def query_hs300_stocks(date=None):
+        """"
+        沪深300成分股
+        方法说明：通过API接口获取沪深300成分股信息，更新频率：每周一更新。
+        返回类型：pandas的DataFrame类型。
+        参数含义：
+        date：查询日期，格式XXXX-XX-XX，为空时默认最新日期。
+        """
+        lg = bs.login()
+        if lg.error_code != '0':
+            logger.error('login respond  error_msg:' + lg.error_msg)
+
+        rs = bs.query_hs300_stocks(date)
+        if rs.error_code != '0':
+            logger.error('query_hs300_stocks respond  error_msg:' + rs.error_msg)
+
+        hs300_stocks = []
+        while (rs.error_code == '0') & rs.next():
+            hs300_stocks.append(rs.get_row_data())
+        result = pd.DataFrame(hs300_stocks, columns=rs.fields)
+
+        bs.logout()
+        return result
+
+    @staticmethod
+    def query_zz500_stocks(date=None):
+        """
+        中证500成分股
+        方法说明：通过API接口获取中证500成分股信息，更新频率：每周一更新。
+        返回类型：pandas的DataFrame类型。
+        date：查询日期，格式XXXX-XX-XX，为空时默认最新日期。
+        """
+        lg = bs.login()
+        if lg.error_code != '0':
+            logger.error('login respond  error_msg:' + lg.error_msg)
+
+        rs = bs.query_zz500_stocks(date)
+        if rs.error_code != '0':
+            logger.error('query_zz500_stocks respond  error_msg:' + rs.error_msg)
+
+        zz500_stocks = []
+        while (rs.error_code == '0') & rs.next():
+            zz500_stocks.append(rs.get_row_data())
+        result = pd.DataFrame(zz500_stocks, columns=rs.fields)
+
+        bs.logout()
+        return result
 
 
 if __name__ == '__main__':

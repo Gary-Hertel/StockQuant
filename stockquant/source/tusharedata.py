@@ -2,7 +2,7 @@ import tushare as ts
 from stockquant.config import config
 
 
-class TuShare:
+class TuShareData:
 
     @staticmethod
     def new_stock():

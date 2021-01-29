@@ -1,6 +1,6 @@
 from stockquant.source.baostockdata import BaoStockData
 from stockquant.source.sinadata import SinaData
-from stockquant.source.tushare_pro import TuShare
+from stockquant.source.tusharedata import TuShareData
 from stockquant.utils.tools import get_localtime
 
 
@@ -92,9 +92,243 @@ class Market:
         return BaoStockData.query_adjust_factor(code, start_date, end_date)
 
     @staticmethod
+    def profit_data(symbol, year=None, quarter=None):
+        """
+        季频盈利能力
+        方法说明：通过API接口获取季频盈利能力信息，可以通过参数设置获取对应年份、季度数据，提供2007年至今数据。
+        返回类型：pandas的DataFrame类型。
+        参数含义：
+        symbol：股票代码，sh或sz+6位数字代码，或者指数代码，如：sh601398。sh：上海；sz：深圳。此参数不可为空；
+        year：统计年份，为空时默认当前年；
+        quarter：统计季度，可为空，默认当前季度。不为空时只有4个取值：1，2，3，4。
+        """
+        code = 'sh.' + str(symbol).split('sh')[1] if str(symbol).startswith("sh") else 'sz.' + str(symbol).split('sz')[1]
+        return BaoStockData.query_profit_data(code, year, quarter)
+
+    @staticmethod
+    def operation_data(symbol, year=None, quarter=None):
+        """
+        季频营运能力
+        方法说明：通过API接口获取季频营运能力信息，可以通过参数设置获取对应年份、季度数据，提供2007年至今数据。
+        返回类型：pandas的DataFrame类型。
+        参数含义：
+        symbol：股票代码，sh或sz+6位数字代码，或者指数代码，如：sh601398。sh：上海；sz：深圳。此参数不可为空；
+        year：统计年份，为空时默认当前年；
+        quarter：统计季度，为空时默认当前季度。不为空时只有4个取值：1，2，3，4。
+        """
+        code = 'sh.' + str(symbol).split('sh')[1] if str(symbol).startswith("sh") else 'sz.' + str(symbol).split('sz')[1]
+        return BaoStockData.query_operation_data(code, year, quarter)
+
+    @staticmethod
+    def growth_data(symbol, year=None, quarter=None):
+        """
+        季频成长能力
+        方法说明：通过API接口获取季频成长能力信息，可以通过参数设置获取对应年份、季度数据，提供2007年至今数据。
+        返回类型：pandas的DataFrame类型。
+        参数含义：
+        symbol：股票代码，sh或sz+6位数字代码，或者指数代码，如：sh601398。sh：上海；sz：深圳。此参数不可为空；
+        year：统计年份，为空时默认当前年；
+        quarter：统计季度，为空时默认当前季度。不为空时只有4个取值：1，2，3，4。
+        """
+        code = 'sh.' + str(symbol).split('sh')[1] if str(symbol).startswith("sh") else 'sz.' + str(symbol).split('sz')[1]
+        return BaoStockData.query_growth_data(code, year, quarter)
+
+    @staticmethod
+    def balance_data(symbol, year=None, quarter=None):
+        """
+        季频偿债能力
+        通过API接口获取季频偿债能力信息，可以通过参数设置获取对应年份、季度数据，提供2007年至今数据。
+        返回类型：pandas的DataFrame类型。
+        参数含义：
+        symbol：股票代码，sh或sz+6位数字代码，或者指数代码，如：sh601398。sh：上海；sz：深圳。此参数不可为空；
+        year：统计年份，为空时默认当前年；
+        quarter：统计季度，为空时默认当前季度。不为空时只有4个取值：1，2，3，4。
+        """
+        code = 'sh.' + str(symbol).split('sh')[1] if str(symbol).startswith("sh") else 'sz.' + str(symbol).split('sz')[1]
+        return BaoStockData.query_balance_data(code, year, quarter)
+
+    @staticmethod
+    def cash_flow_data(symbol, year=None, quarter=None):
+        """
+        季频现金流量
+        方法说明：通过API接口获取季频现金流量信息，可以通过参数设置获取对应年份、季度数据，提供2007年至今数据。
+        返回类型：pandas的DataFrame类型.
+        参数含义：
+        symbol：股票代码，sh或sz+6位数字代码，或者指数代码，如：sh601398。sh：上海；sz：深圳。此参数不可为空；
+        year：统计年份，为空时默认当前年；
+        quarter：统计季度，为空时默认当前季度。不为空时只有4个取值：1，2，3，4。
+        """
+        code = 'sh.' + str(symbol).split('sh')[1] if str(symbol).startswith("sh") else 'sz.' + str(symbol).split('sz')[1]
+        return BaoStockData.query_cash_flow_data(code, year, quarter)
+
+    @staticmethod
+    def dupont_data(symbol, year=None, quarter=None):
+        """
+        季频杜邦指数
+        方法说明：通过API接口获取季频杜邦指数信息，可以通过参数设置获取对应年份、季度数据，提供2007年至今数据。
+        返回类型：pandas的DataFrame类型。
+        参数含义：
+        symbol：股票代码，sh或sz+6位数字代码，或者指数代码，如：sh601398。sh：上海；sz：深圳。此参数不可为空；
+        year：统计年份，为空时默认当前年；
+        quarter：统计季度，为空时默认当前季度。不为空时只有4个取值：1，2，3，4。
+        """
+        code = 'sh.' + str(symbol).split('sh')[1] if str(symbol).startswith("sh") else 'sz.' + str(symbol).split('sz')[1]
+        return BaoStockData.query_dupont_data(code, year, quarter)
+
+    @staticmethod
+    def performance_express_report(symbol, start_date, end_date):
+        """
+        季频公司业绩快报
+        方法说明：通过API接口获取季频公司业绩快报信息，可以通过参数设置获取起止年份数据，提供2006年至今数据。
+        返回类型：pandas的DataFrame类型。
+        参数含义：
+        symbol：股票代码，sh或sz+6位数字代码，或者指数代码，如：sh601398。sh：上海；sz：深圳。此参数不可为空；
+        start_date：开始日期，发布日期或更新日期在这个范围内；
+        end_date：结束日期，发布日期或更新日期在这个范围内。
+        """
+        code = 'sh.' + str(symbol).split('sh')[1] if str(symbol).startswith("sh") else 'sz.' + str(symbol).split('sz')[1]
+        return BaoStockData.query_performance_express_report(code, start_date, end_date)
+
+    @staticmethod
+    def forcast_report(symbol, start_date, end_date):
+        """
+        季频公司业绩预告
+        方法说明：通过API接口获取季频公司业绩预告信息，可以通过参数设置获取起止年份数据，提供2003年至今数据。
+        返回类型：pandas的DataFrame类型。
+        参数含义：
+        symbol：股票代码，sh或sz+6位数字代码，或者指数代码，如：sh601398。sh：上海；sz：深圳。此参数不可为空；
+        start_date：开始日期，发布日期或更新日期在这个范围内；
+        end_date：结束日期，发布日期或更新日期在这个范围内。
+        """
+        code = 'sh.' + str(symbol).split('sh')[1] if str(symbol).startswith("sh") else 'sz.' + str(symbol).split('sz')[1]
+        return BaoStockData.query_forcast_report(code, start_date, end_date)
+
+    @staticmethod
+    def deposit_rate_data(start_date=None, end_date=None):
+        """
+        存款利率
+        方法说明：通过API接口获取存款利率，可以通过参数设置获取对应起止日期的数据。
+        返回类型：pandas的DataFrame类型。
+        参数含义：
+        start_date：开始日期，格式XXXX-XX-XX，发布日期在这个范围内，可以为空；
+        end_date：结束日期，格式XXXX-XX-XX，发布日期在这个范围内，可以为空。
+        """
+        return BaoStockData.query_deposit_rate_data(start_date, end_date)
+
+    @staticmethod
+    def loan_rate_data(start_date=None, end_date=None):
+        """
+        贷款利率
+        方法说明：通过API接口获取贷款利率，可以通过参数设置获取对应起止日期的数据。
+        返回类型：pandas的DataFrame类型。
+        参数含义：
+        start_date：开始日期，格式XXXX-XX-XX，发布日期在这个范围内，可以为空；
+        end_date：结束日期，格式XXXX-XX-XX，发布日期在这个范围内，可以为空。
+        """
+        return BaoStockData.query_loan_rate_data(start_date, end_date)
+
+    @staticmethod
+    def required_reserve_ratio_data(start_date=None, end_date=None, yearType=None):
+        """
+        存款准备金率
+        方法说明：通过API接口获取存款准备金率，可以通过参数设置获取对应起止日期的数据。
+        返回类型：pandas的DataFrame类型。
+        参数含义：
+        start_date：开始日期，格式XXXX-XX-XX，发布日期在这个范围内，可以为空；
+        end_date：结束日期，格式XXXX-XX-XX，发布日期在这个范围内，可以为空；
+        yearType:年份类别，默认为0，查询公告日期；1查询生效日期。
+        """
+        return BaoStockData.query_required_reserve_ratio_data(start_date, end_date, yearType)
+
+    @staticmethod
+    def money_supply_data_month(start_date=None, end_date=None):
+        """
+        货币供应量
+        方法说明：通过API接口获取货币供应量，可以通过参数设置获取对应起止日期的数据。
+        返回类型：pandas的DataFrame类型。
+        参数含义：
+        start_date：开始日期，格式XXXX-XX，发布日期在这个范围内，可以为空；
+        end_date：结束日期，格式XXXX-XX，发布日期在这个范围内，可以为空。
+        """
+        return BaoStockData.query_money_supply_data_month(start_date, end_date)
+
+    @staticmethod
+    def money_supply_data_year(start_date=None, end_date=None):
+        """
+        货币供应量(年底余额)
+        方法说明：通过API接口获取货币供应量(年底余额)，可以通过参数设置获取对应起止日期的数据。
+        返回类型：pandas的DataFrame类型。
+        参数含义：
+        start_date：开始日期，格式XXXX，发布日期在这个范围内，可以为空；
+        end_date：结束日期，格式XXXX，发布日期在这个范围内，可以为空。
+        """
+        return BaoStockData.query_money_supply_data_year(start_date, end_date)
+
+    @staticmethod
+    def shibor_data(start_date=None, end_date=None):
+        """
+        银行间同业拆放利率
+        方法说明：通过API接口获取银行间同业拆放利率，可以通过参数设置获取对应起止日期的数据。
+        返回类型：pandas的DataFrame类型。
+        参数含义：
+        start_date：开始日期，格式XXXX，发布日期在这个范围内，可以为空；
+        end_date：结束日期，格式XXXX，发布日期在这个范围内，可以为空。
+        """
+        return BaoStockData.query_shibor_data(start_date, end_date)
+
+    @staticmethod
+    def stock_industry(symbol=None, date=None):
+        """
+        行业分类
+        方法说明：通过API接口获取行业分类信息，更新频率：每周一更新。
+        返回类型：pandas的DataFrame类型。
+        参数含义：
+        symbol：A股股票代码，sh或sz+6位数字代码，或者指数代码，如：sh601398。sh：上海；sz：深圳。可以为空；
+        date：查询日期，格式XXXX-XX-XX，为空时默认最新日期。
+        """
+        if symbol:
+            code = 'sh.' + str(symbol).split('sh')[1] if str(symbol).startswith("sh") else 'sz.' + str(symbol).split('sz')[1]
+        else:
+            code = None
+
+        return BaoStockData.query_stock_industry(code, date)
+
+    @staticmethod
+    def sz50_stocks(date=None):
+        """
+        上证50成分股
+        方法说明：通过API接口获取上证50成分股信息，更新频率：每周一更新。
+        返回类型：pandas的DataFrame类型。
+        参数含义：
+        date：查询日期，格式XXXX-XX-XX，为空时默认最新日期。
+        """
+        return BaoStockData.query_sz50_stocks(date)
+
+    @staticmethod
+    def hs300_stocks(date=None):
+        """"
+        沪深300成分股
+        方法说明：通过API接口获取沪深300成分股信息，更新频率：每周一更新。
+        返回类型：pandas的DataFrame类型。
+        参数含义：
+        date：查询日期，格式XXXX-XX-XX，为空时默认最新日期。
+        """
+        return BaoStockData.query_hs300_stocks(date)
+
+    @staticmethod
+    def zz500_stocks(date=None):
+        """
+        中证500成分股
+        方法说明：通过API接口获取中证500成分股信息，更新频率：每周一更新。
+        返回类型：pandas的DataFrame类型。
+        date：查询日期，格式XXXX-XX-XX，为空时默认最新日期。
+        """
+        return BaoStockData.query_zz500_stocks(date)
+
+    @staticmethod
     def new_stock():
         """获取新股上市列表数据"""
-        return TuShare.new_stock()
+        return TuShareData.new_stock()
 
 
 if __name__ == '__main__':
