@@ -7,6 +7,7 @@ from stockquant.utils.storage import txt_read, txt_save, save_to_csv_file, read_
 from stockquant.utils.tools import *
 from stockquant.config import config
 from stockquant.indicators import *
+from stockquant.trade import Trade
 
 __all__ = [
     "Market", "BackTest", "backtest_save", "plot_asset", "DingTalk", "sendmail", "logger", "plot_signal",
@@ -16,5 +17,6 @@ __all__ = [
     'ATR', "BOLL", "CurrentBar", "HIGHEST", "MA", "MACD", "EMA", "KAMA", "KDJ", "LOWEST", "OBV", "RSI", "ROC", "STOCHRSI", "SAR", "STDDEV", "TRIX", "VOLUME",
     'CCI',
     "config",
+    "Trade"
 ]
 
