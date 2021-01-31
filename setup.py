@@ -33,6 +33,7 @@ setup(
         "tushare",
         "baostock",
         "finplot",
-        "akshare"
+        "akshare",
+        "easytrader"
     ]
 )
