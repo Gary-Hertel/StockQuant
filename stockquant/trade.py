@@ -27,9 +27,9 @@ class Trade:
             config.loads(config_file)
             self.user = easytrader.use('ths')
             if path:
-                self.user.connect(r'{}'.format(path))
+                self.user.connect(path)
             else:
-                self.user.connect(r'c:\平安证券智投版\xiadan.exe')
+                self.user.connect(r'C:\东方同花顺独立下单\xiadan.exe')
             logger.info("initialize trade client success !")
         except Exception as e:
             logger.error("initialize trade client failed ! error message: {}".format(e))
