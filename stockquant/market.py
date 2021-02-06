@@ -19,7 +19,7 @@ class Market:
         :param symbol: 例如："sh601003"，或者"sz002307"，前者是沪市，后者是深市
         :return:返回一个字典
         """
-        logger.warning("It is recommended to increase the time interval when calling real-time data ！")
+        logger.debug("It is recommended to increase the time interval when calling real-time data ！")
         return SinaData.get_realtime_data(symbol)
 
     @staticmethod
@@ -362,7 +362,7 @@ class Market:
         描述: A 股数据是从新浪财经获取的数据, 重复运行本函数会被新浪暂时封 IP, 建议增加时间间隔
         限量: 单次返回所有 A 股上市公司的实时行情数据
         """
-        logger.warning("It is recommended to increase the time interval when calling real-time data ！")
+        logger.debug("It is recommended to increase the time interval when calling real-time data ！")
         return AkShareData.all_stock_tick()
 
     @staticmethod
@@ -371,7 +371,7 @@ class Market:
         描述: 股票指数数据是从新浪财经获取的数据
         限量: 单次返回所有指数的实时行情数据
         """
-        logger.warning("It is recommended to increase the time interval when calling real-time data ！")
+        logger.debug("It is recommended to increase the time interval when calling real-time data ！")
         return AkShareData.stock_zh_index_spot()
 
     """
