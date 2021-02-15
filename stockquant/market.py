@@ -56,11 +56,6 @@ class Market:
         return BaoStockData.query_history_k_data_plus(symbol, timeframe, adj=adj, start_date=start_date, end_date=end_date)
 
     @staticmethod
-    def stocks_list(day=None):
-        """股票列表,获取基础信息数据，包括股票代码、名称、上市日期、退市日期等"""
-        return BaoStockData.query_all_stock(day=day)
-
-    @staticmethod
     def today_is_open():
         """查询今日沪深股市是否开盘，如果开盘返回True,反之False"""
         today = get_localtime()[0: 10]
@@ -382,6 +377,11 @@ class Market:
     def new_stock():
         """获取新股上市列表数据"""
         return TuShareData.new_stock()
+
+    @staticmethod
+    def stocks_list():
+        """股票列表,获取基础信息数据，包括股票代码、名称、上市日期、退市日期等"""
+        return TuShareData.stocks_list()
 
 
 if __name__ == '__main__':
