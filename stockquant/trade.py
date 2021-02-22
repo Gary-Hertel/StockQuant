@@ -4,6 +4,7 @@ from stockquant.utils.tools import sleep
 from stockquant.utils.logger import logger
 from stockquant.utils.dingtalk import DingTalk
 from easytrader.utils.stock import get_today_ipo_data
+from easytrader import grid_strategies
 
 
 class Trade:
@@ -77,7 +78,10 @@ class Trade:
             error: Error information, otherwise it's None.
         """
         try:
+            self.user.grid_strategy = grid_strategies.Xls
             result = self.user.cancel_entrust('buy/sell {order_id}'.format(order_id=order_id))
+            if result["message"] != '撤单申报成功':
+                return None, result
             return result, None
         except Exception as e:
             return None, e
@@ -90,6 +94,7 @@ class Trade:
             error: Error information, otherwise it's None.
         """
         try:
+            self.user.grid_strategy = grid_strategies.Xls
             result = self.user.today_entrusts
             return result, None
         except Exception as e:
@@ -103,6 +108,7 @@ class Trade:
             error: Error information, otherwise it's None.
         """
         try:
+            self.user.grid_strategy = grid_strategies.Xls
             result = self.user.today_trades
             return result, None
         except Exception as e:
@@ -116,6 +122,7 @@ class Trade:
             error: Error information, otherwise it's None.
         """
         try:
+            self.user.grid_strategy = grid_strategies.Xls
             result = self.user.position
             return result, None
         except Exception as e:
