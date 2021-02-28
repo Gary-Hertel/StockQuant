@@ -1,6 +1,5 @@
 from stockquant.source.baostockdata import BaoStockData
 from stockquant.source.sinadata import SinaData
-from stockquant.source.aksharedata import AkShareData
 from stockquant.source.tusharedata import TuShareData
 from stockquant.utils.tools import get_localtime
 from stockquant.utils.logger import logger
@@ -330,44 +329,6 @@ class Market:
         date：查询日期，格式XXXX-XX-XX，为空时默认最新日期。
         """
         return BaoStockData.query_zz500_stocks(date)
-
-    """
-    AkShareData
-    """
-
-    @staticmethod
-    def stock_sse_summary_df():
-        """
-        上海证券交易所-股票数据总貌
-        限量: 单次返回最近交易日的股票数据总貌数据(当前交易日的数据需要交易所收盘后统计)
-        """
-        return AkShareData.stock_sse_summary_df()
-
-    @staticmethod
-    def stock_szse_summary():
-        """
-        深圳证券交易所-市场总貌
-        限量: 单次返回最近交易日的市场总貌数据(当前交易日的数据需要交易所收盘后统计)
-        """
-        return AkShareData.stock_szse_summary()
-
-    @staticmethod
-    def all_stock_tick():
-        """
-        描述: A 股数据是从新浪财经获取的数据, 重复运行本函数会被新浪暂时封 IP, 建议增加时间间隔
-        限量: 单次返回所有 A 股上市公司的实时行情数据
-        """
-        logger.debug("It is recommended to increase the time interval when calling real-time data ！")
-        return AkShareData.all_stock_tick()
-
-    @staticmethod
-    def stock_zh_index_spot():
-        """
-        描述: 股票指数数据是从新浪财经获取的数据
-        限量: 单次返回所有指数的实时行情数据
-        """
-        logger.debug("It is recommended to increase the time interval when calling real-time data ！")
-        return AkShareData.stock_zh_index_spot()
 
     """
     TuShareData

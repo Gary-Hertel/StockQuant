@@ -124,10 +124,6 @@ config.loads('config.json')			# 载入配置文件
 | 获取上证50成分股信息     |               `Market.sz50_stocks(date=None)`                |
 | 沪深300成分股            |               `Market.hs300_stocks(date=None)`               |
 | 中证500成分股            |               `Market.zz500_stocks(date=None)`               |
-| 上证交易所-股票数据总貌  |               `Market.stock_sse_summary_df()`                |
-| 深圳证券交易所-市场总貌  |                `Market.stock_szse_summary()`                 |
-| 获取所有 A 股实时行情    |                  `Market.all_stock_tick()`                   |
-| 获取所有指数的实时行情   |                `Market.stock_zh_index_spot()`                |
 | 获取新股上市列表数据     |                     `Market.new_stock()`                     |
 
 **Note: 获取指定股票的实时数据时，Tick对象数据结构如下：**
@@ -166,7 +162,7 @@ config.loads('config.json')			# 载入配置文件
 |   `tick.ask5_price`    | `float`  |  卖五报价  |
 |    `tick.timestamp`    |  `str`   |   时间戳   |
 
-### 
+
 
 ------
 

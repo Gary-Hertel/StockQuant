@@ -8,7 +8,7 @@ except ImportError:
 
 setup(
     name="stockquant",
-    version="0.0.9",
+    version="0.1.0",
     packages=[
         "stockquant",
         "stockquant/source",
@@ -33,7 +33,6 @@ setup(
         "tushare",
         "baostock",
         "finplot",
-        "akshare",
         "easytrader"
     ]
 )
