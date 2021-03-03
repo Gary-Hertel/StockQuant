@@ -317,6 +317,48 @@ utctime_str_to_mts(utctime_str)			# 将UTC日期时间格式字符串转换成�
 
 
 
+## 九、自动交易
+
+```python
+"""
+股票自动交易，使用的是easytrader开源项目。
+仅支持windows系统，云主机与虚拟机上无法运行。
+具体用法，可参考哔哩哔哩教学视频：
+    https://www.bilibili.com/video/BV1zK411u7uG
+"""
+
+
+from stockquant.quant import *
+
+
+class Strategy:
+
+    def __init__(self):
+        self.trade = Trade(config_file="config.json", symbol="sh512980")    # 初始化trade模块
+
+        self.do_action()
+
+    def do_action(self):
+        price = Market.tick("sh512980").ask1_price          # 获取卖一价格
+        success, error = self.trade.buy(price, amount)      # 买入
+        success, error = self.trade.sell(price, amount)     # 卖出
+        success, error = self.trade.get_positions()         # 查询当前持仓
+        success, error = self.trade.get_balance()           # 查询资金信息
+        success, error = self.trade.get_today_orders()      # 查询今日委托
+        success, error = self.trade.get_today_deals()       # 查询今日成交
+        if error:
+            DingTalk.text("交易提醒：失败：{}".format(error))
+            pass
+        logger.info("success:{}".format(success))
+
+
+if __name__ == '__main__':
+
+    Strategy()
+```
+
+
+
 ------
 
-`updated at 2021/01/29`
+`updated at 2021/03/03`
