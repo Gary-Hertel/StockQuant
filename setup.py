@@ -8,7 +8,7 @@ except ImportError:
 
 setup(
     name="stockquant",
-    version="0.1.0",
+    version="1.1.0",
     packages=[
         "stockquant",
         "stockquant/source",
@@ -18,10 +18,10 @@ setup(
     description="Professional quant framework",
     url="https://github.com/Gary-Hertel/StockQuant",
     author="Gary-Hertel",
-    author_email="hertelquant@foxmail.com",
+    author_email="garyhertel@foxmail.com",
     license="MIT",
     keywords=[
-        "stocklquant", "quant", "framework"
+        "stockquant", "quant", "framework"
     ],
     install_requires=[
         "numpy",
@@ -33,6 +33,7 @@ setup(
         "tushare",
         "baostock",
         "finplot",
-        "easytrader"
+        "easytrader",
+        "PyQt5==5.14.1"
     ]
 )

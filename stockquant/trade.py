@@ -20,7 +20,7 @@ class Trade:
     def __init__(self, config_file, symbol=None, path=None, delay=None):
         """initialize Trade API client."""
         try:
-            sleep(delay or 10)
+            sleep(delay or 1)
             if symbol:
                 self.code = str(symbol).replace("sh", "") if str(symbol).startswith("sh") else str(symbol).replace("sz", "")
             else:
