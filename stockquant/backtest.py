@@ -3,7 +3,6 @@
 __all__ = ["BackTest", "backtest_save", "plot_asset"]
 
 import os
-import finplot as fplt
 from matplotlib import pyplot as plt
 from stockquant.utils.tools import *
 from stockquant.utils.storage import save_to_csv_file, read_csv_file
@@ -208,50 +207,3 @@ def plot_asset():
     figManager.window.showMaximized()
     os.rename(".\回测.csv", ".\回测 {}.csv".format(get_cur_timestamp()))
     plt.show()
-
-
-def plot_signal(kline, buy_signal=None, sell_signal=None, *args):
-    """回测完成后调用此函数绘制k线图与指标"""
-    fplt.foreground = '#FFFFFF'
-    fplt.background = '#333333'
-    fplt.odd_plot_background = '#333333'
-    fplt.cross_hair_color = "#FFFFFF"
-    ax, ax2, ax3 = fplt.create_plot('历史K线图', init_zoom_periods=100, maximize=True, rows=3)
-    fplt.add_legend("K线主图", ax)
-    fplt.add_legend("成交量", ax2)
-    fplt.add_legend("指标副图", ax3)
-
-    df = pd.DataFrame(kline)
-    df = df[[0, 1, 2, 3, 4, 5]]
-    columns = ['time', 'open', 'high', 'low', 'close', 'volume']
-    df.columns = columns
-    df = df.astype(
-        {
-            'time': 'datetime64[ns]',
-            'open': 'float64',
-            'high': 'float64',
-            'low': 'float64',
-            'close': 'float64',
-            'volume': 'float64'
-        }
-    )
-    candlesticks = df['time open close high low'.split()]
-    volumes = df['time open close volume'.split()]
-    fplt.candlestick_ochl(candlesticks)
-    fplt.volume_ocv(volumes, ax=ax2)
-
-    if args:
-        count = 1
-        for i in args:
-            indicators = pd.Series(i)
-            fplt.plot(df['time'], indicators, legend="指标{}".format(count), ax=ax3)
-            count += 1
-    if buy_signal:
-        for i in buy_signal:
-            df.loc[df['high'] == buy_signal[buy_signal.index(i)], "buy_signal"] = df['high']
-        fplt.plot(df['time'], df['buy_signal'], ax=ax, color="#FF0000", style='^', width=2, legend='买入信号')
-    if sell_signal:
-        for i in sell_signal:
-            df.loc[df['low'] == sell_signal[sell_signal.index(i)], "sell_signal"] = df['low']
-        fplt.plot(df['time'], df['sell_signal'], ax=ax, color="#00FF00", style='v', width=2, legend='卖出信号')
-    fplt.show()

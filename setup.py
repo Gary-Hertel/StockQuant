@@ -32,8 +32,6 @@ setup(
         "matplotlib",
         "tushare",
         "baostock",
-        "finplot",
-        "easytrader",
-        "PyQt5==5.14.1"
+        "easytrader"
     ]
 )
